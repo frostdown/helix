@@ -23,6 +23,7 @@
     "@fastify/static": "catalog:",
     "@azx-pbc/secret-store": "workspace:*",
     "@azx-pbc/shared": "workspace:*",
+    "@azx-pbc/telemetry": "workspace:*",
     "@prisma/adapter-pg": "catalog:",
     "@prisma/client": "catalog:",
     "fastify": "catalog:",

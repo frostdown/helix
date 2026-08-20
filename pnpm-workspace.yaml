@@ -63,6 +63,22 @@ catalog:
   archiver: ^8.0.0
   fflate: ^0.8.2
   fastify-plugin: ^6.0.0
+  # ── Observability (ADR-0037) ──
+  # OTel API + SDK. @azx-pbc/telemetry owns every SDK import (only the three
+  # server.ts boot seams pull it in); buildApp()-and-below in all three
+  # services only ever imports the dependency-free @opentelemetry/api facade.
+  # No vendor SDK (applicationinsights, @azure/monitor-*) and no
+  # auto-instrumentation package — ADR-0037 decisions 1 and 4 reject both
+  # outright, permanently.
+  "@opentelemetry/api": ^1.9.1
+  "@opentelemetry/resources": ^2.10.0
+  "@opentelemetry/sdk-trace-node": ^2.10.0
+  "@opentelemetry/sdk-metrics": ^2.10.0
+  "@opentelemetry/semantic-conventions": ^1.43.0
+  # Exporters track OTel's own slower-graduating pre-1.0 line (normal for this
+  # ecosystem); still peer-compatible with the api/sdk pins above.
+  "@opentelemetry/exporter-trace-otlp-http": ^0.221.0
+  "@opentelemetry/exporter-metrics-otlp-http": ^0.221.0
   # ── Auth (M3) ──
   # jose + openid-client are the edge's two allowed auth additions (project
   # plan §1); jose also verifies portal bearer tokens, openid-client also

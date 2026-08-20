@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
-import { buildApp } from "./app.js";
+import { startTelemetry } from "@azx-pbc/telemetry";
+import { SERVICE_NAME, buildApp } from "./app.js";
 
 /**
  * Dev convenience: load `apps/portal/.env.local` (gitignored) into process.env
@@ -35,10 +36,16 @@ function loadDotEnvLocal(): void {
 
 loadDotEnvLocal();
 
+const telemetry = startTelemetry(SERVICE_NAME);
+
 const port = Number(process.env.PORTAL_PORT ?? process.env.PORT ?? 3001);
 const host = process.env.HOST ?? "0.0.0.0";
 
 const app = buildApp();
+
+app.addHook("onClose", async () => {
+  await telemetry.shutdown();
+});
 
 try {
   await app.listen({ port, host });

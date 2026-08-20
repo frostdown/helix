@@ -12,7 +12,7 @@ import { makeProxyHandler } from "./proxy.js";
  * plaintext secrets and a route to the public internet; everything else about it
  * is deliberately tiny.
  */
-const SERVICE_NAME = "azx-egress";
+export const SERVICE_NAME = "azx-egress";
 
 export interface EgressDeps {
   config: EgressConfig;

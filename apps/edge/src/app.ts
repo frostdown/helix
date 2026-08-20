@@ -54,7 +54,7 @@ import type { AppDataStore } from "./gateway/data.js";
  * M2: host routing, registry projection, asset streaming, baseline CSP.
  * Sessions/OIDC (M3) and the `/_api/*` gateway (M4) come later.
  */
-const SERVICE_NAME = "azx-edge";
+export const SERVICE_NAME = "azx-edge";
 
 export interface EdgeDeps {
   config: EdgeConfig;

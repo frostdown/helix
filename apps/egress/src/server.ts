@@ -6,7 +6,8 @@ import {
   type SecretStore,
   type TokenProvider,
 } from "@azx-pbc/secret-store";
-import { buildApp } from "./app.js";
+import { startTelemetry } from "@azx-pbc/telemetry";
+import { SERVICE_NAME, buildApp } from "./app.js";
 import { loadConfig } from "./config.js";
 import { deriveInstructionKey } from "./instruction.js";
 import { PgSecretResolver, type SecretResolver } from "./secrets.js";
@@ -49,6 +50,8 @@ function loadDotEnvLocal(): void {
 }
 
 loadDotEnvLocal();
+
+const telemetry = startTelemetry(SERVICE_NAME);
 
 const config = loadConfig();
 const instructionKey = deriveInstructionKey(config.instructionSecret);
@@ -126,6 +129,9 @@ app.addHook("onClose", async () => {
   await burnStore.close();
   await resolver?.close();
   await tokenProvider?.close();
+  // Last: a hung collector's final flush is bounded by the exporter timeout, and
+  // must not stall the pool/timer teardown above it (ADR-0037 decision 5).
+  await telemetry.shutdown();
 });
 
 try {

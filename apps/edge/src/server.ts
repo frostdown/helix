@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
-import { buildApp } from "./app.js";
+import { startTelemetry } from "@azx-pbc/telemetry";
+import { SERVICE_NAME, buildApp } from "./app.js";
 import { loadConfig, publicOrigin } from "./config.js";
 import { createBlobReader } from "./blob/client.js";
 import { LiveRegistry, type RegistryLogger } from "./registry/listener.js";
@@ -52,6 +53,8 @@ function loadDotEnvLocal(): void {
 }
 
 loadDotEnvLocal();
+
+const telemetry = startTelemetry(SERVICE_NAME);
 
 // Bind 0.0.0.0 — inside the container the port is reached across the Docker
 // network / forwarded to the host.
@@ -255,6 +258,9 @@ app.addHook("onClose", async () => {
   await llmProvider?.close();
   await counterStore.close();
   await blob.close();
+  // Last: a hung collector's final flush is bounded by the exporter timeout, and
+  // must not stall the pool/timer teardown above it (ADR-0037 decision 5).
+  await telemetry.shutdown();
 });
 
 try {

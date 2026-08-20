@@ -30,7 +30,7 @@ import { assertDeploymentConfig } from "./deployment.js";
  * writes, deploy endpoint, capability approvals. Not routable from app
  * subdomains. Owns the Postgres schema and migrations (Prisma).
  */
-const SERVICE_NAME = "azx-portal";
+export const SERVICE_NAME = "azx-portal";
 
 export interface BuildAppOptions {
   /** Inject a PrismaClient and BlobStore (tests). Defaults build real ones. */

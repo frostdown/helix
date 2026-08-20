@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@azx-pbc/shared": "workspace:*",
+    "@azx-pbc/telemetry": "workspace:*",
     "fastify": "catalog:",
     "jose": "catalog:",
     "openid-client": "catalog:",
